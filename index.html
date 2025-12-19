@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>센과 치히로의 행방불명에 대하여</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 기본 고딕과 서정적인 명조체(Serif) 두 가지를 로드합니다. */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700&display=swap');
+        
+        /* 스크롤바 스타일 커스텀 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1); 
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.8); 
+            border-radius: 10px;
+            border: 2px solid rgba(14, 165, 233, 0.1); /* 하늘색 계열 테두리 */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 1);
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f9ff; /* 연한 하늘색 배경 */
+            color: #1e293b;
+            overflow-x: hidden;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        /* 명조체 스타일 정의 */
+        .font-serif-custom {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        /* 사이드바 테마 변경 (하늘색 테두리 및 배경) */
+        .sidebar {
+            width: 20%;
+            min-width: 200px;
+            border-right: 2px solid #0ea5e9; /* 하늘색 실선 */
+            height: 100vh;
+            padding: 2rem 1rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #f8fafc;
+            z-index: 50;
+        }
+
+        /* 메인 컨텐츠 영역 */
+        .content-area {
+            margin-left: 20%;
+            width: 80%;
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            background-image: url('https://tse4.mm.bing.net/th/id/OIP.7L_FWAPYxR9tKtF5oa2otgHaEK?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .content-area::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .section {
+            position: relative;
+            z-index: 2;
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        /* 메뉴 버튼 테마 (하늘색) */
+        .nav-button {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #0ea5e9;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 700;
+            border-radius: 4px;
+            font-family: 'Noto Serif KR', serif;
+            color: #0369a1;
+        }
+
+        .nav-button:hover {
+            background-color: #0ea5e9;
+            color: white;
+        }
+
+        .active-nav {
+            background-color: #0ea5e9;
+            color: white;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        #section-main.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 4rem);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gif-container {
+            width: 320px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .analysis-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            border-left: 5px solid #0ea5e9; /* 하늘색 강조 선 */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .poster-container {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .poster-img {
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            border-radius: 10px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+        }
+
+        .playing .poster-img {
+            box-shadow: 0 0 50px rgba(14, 165, 233, 0.6);
+            transform: scale(1.03);
+        }
+
+        .music-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(3, 105, 161, 0.9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .playing .music-status {
+            opacity: 1;
+        }
+
+        .pulse {
+            width: 10px;
+            height: 10px;
+            background-color: #bae6fd;
+            border-radius: 50%;
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(186, 230, 253, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(186, 230, 253, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(186, 230, 253, 0); }
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.94);
+            border: 2px solid #0ea5e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* 섹션 제목 테마 (하늘색 강조) */
+        .section-header-text {
+            color: #0369a1;
+            font-size: 2.25rem;
+            font-weight: 700;
+            font-family: 'Noto Serif KR', serif;
+            text-shadow: 0 2px 4px rgba(255,255,255,0.8);
+            border-bottom: 4px solid #7dd3fc;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 700;
+            color: #0369a1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h1 class="text-xl font-bold mb-8 text-center text-sky-900 font-serif-custom">센과 치히로의<br>행방불명에 대하여</h1>
+        <div id="nav-container">
+            <button onclick="showSection('main')" class="nav-button active-nav" id="btn-main">홈 (포스터)</button>
+            <button onclick="showSection('intro')" class="nav-button" id="btn-intro">예고편과 제작의도</button>
+            <button onclick="showSection('analysis')" class="nav-button" id="btn-analysis">작품분석</button>
+            <button onclick="showSection('scenes')" class="nav-button" id="btn-scenes">장면분석</button>
+        </div>
+        <p class="mt-10 text-xs text-gray-500 text-center">홈 화면의 포스터를 클릭하면<br>업로드한 OST가 재생됩니다.</p>
+    </div>
+
+    <div class="content-area">
+        
+        <!-- 오디오 소스 경로를 업로드하신 파일명과 정확히 일치시켰습니다. -->
+        <audio id="bgm" loop>
+            <source src="ANNI 千と千尋の神隠し ／ Spirited Away (센과 치히로의 행방불명／2001) OST ★언제나 몇번이라도 ／ いつも何度でも ／ 키무라 유미(Yumi Kimura)★ - HEEYA 추억쏭~♪.mp3" type="audio/mpeg">
+        </audio>
+
+        <div id="section-main" class="section active">
+            <div id="poster-wrapper" class="poster-container">
+                <!-- 포스터 클릭 시 toggleMusic() 함수가 실행됩니다. -->
+                <img src="https://www.themoviedb.org/t/p/original/rIKWsMItjBLrgt51Xpk4MNAUQe2.jpg" 
+                     alt="센과 치히로 영화 포스터" 
+                     class="poster-img"
+                     onclick="toggleMusic()">
+                
+                <div class="music-status">
+                    <div class="pulse"></div>
+                    <span>OST 재생 중</span>
+                </div>
+            </div>
+            <p id="music-guide" class="mt-10 text-lg font-bold text-sky-950 drop-shadow-sm transition-all duration-300 bg-white/70 px-8 py-3 rounded-full border border-sky-200 backdrop-blur-sm font-serif-custom">포스터를 클릭하여 '언제나 몇 번이라도' OST를 감상하세요.</p>
+        </div>
+
+        <div id="section-intro" class="section">
+            <h2 class="section-header-text">예고편과 제작의도</h2>
+            
+            <div class="video-container">
+                <video controls preload="auto">
+                    <source src="video.mp4" type="video/mp4">
+                    브라우저가 비디오 태그를 지원하지 않습니다.
+                </video>
+            </div>
+
+            <div class="info-box">
+                대중적으로 많이 알려져 있는 애니 속 스쳐지나가는 장면 속 깃들어 있는 일본의 사회적 문화와 사상들을 친구들에게 알려주기 위해 제작하였다.
+            </div>
+        </div>
+
+        <div id="section-analysis" class="section">
+            <h2 class="section-header-text">작품분석</h2>
+            
+            <div class="mb-8 p-6 bg-white/95 backdrop-blur rounded-lg border-l-8 border-sky-500 shadow-xl">
+                <h3 class="text-xl font-bold mb-2 text-sky-900 card-title">사회적 배경</h3>
+                <p class="text-gray-800">1990년대 일본 버블 경제 붕괴 이후 ~ 2000년대 초반의 상실감과 변화</p>
+            </div>
+
+            <div class="analysis-card">
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2 card-title">온천장: 계급과 노동의 사회 시스템</h4>
+                    <p class="leading-relaxed text-gray-700">
+                        작품의 주 무대인 온천장은 철저한 <strong>계급 사회</strong>와 <strong>노동의 규칙</strong>이 지배하는 공간입니다. 최상위 권력자인 유바바부터 말단 노동자인 숯검댕이까지, 각자의 역할이 강제되는 이 시스템은 현대 일본의 복잡한 사회 구조와 관료제를 상징적으로 보여줍니다.
+                    </p>
+                </div>
+                <img src="https://i0.wp.com/bounthavy.com/wp-content/uploads/2020/04/Ghibli-femme-Sen-Voyage-de-Chihiro.jpg?w=640&ssl=1" alt="온천장 장면" class="gif-container">
+            </div>
+
+            <div class="analysis-card">
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2 card-title">이름과 정체성: 가오나시</h4>
+                    <p class="leading-relaxed text-gray-700">
+                        가오나시처럼 이름 없는 존재들은 이 세계관 속에서 끊임없이 방황하며 불안정한 상태에 놓여 있습니다. 일본 문화에서 '이름'은 존재의 본질을 의미하며, 이를 통해 자아를 지키는 것의 중요성을 역설합니다.
+                    </p>
+                </div>
+                <img src="https://i.pinimg.com/originals/8a/c5/47/8ac54772ef454172afed8b00ec732f93.gif" alt="가오나시" class="gif-container">
+            </div>
+
+            <div class="analysis-card">
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2 card-title">일본의 전통과 의복</h4>
+                    <p class="leading-relaxed text-gray-700">
+                        화려한 온천장의 배경 속에서 인물들이 입고 있는 유카타와 기모노는 일본의 전통미를 극대화하며, 현대적인 감각과 고전적 전통이 공존하는 미야자키 하야오 특유의 연출을 보여줍니다.
+                    </p>
+                </div>
+                <img src="https://th.bing.com/th/id/R.1f6ec81c0c0c2e3d9e4aca2ee24b118e?rik=hvVOiDoJPwKgHg&riu=http%3a%2f%2ffile3.instiz.net%2fdata%2ffile3%2f2018%2f05%2f14%2f6%2fd%2f7%2f6d7589486f7d054667315e217e268a78.gif&ehk=mTs5nsqidwi0H0XwEE7lZoXj8Ef7diBQmOOl0Gv28Uk%3d&risl=&pid=ImgRaw&r=0" alt="유카타/기모노 모습" class="gif-container">
+            </div>
+        </div>
+
+        <div id="section-scenes" class="section">
+            <h2 class="section-header-text">장면분석</h2>
+
+            <div class="analysis-card">
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2 card-title">온천장에 신들이 찾아와 목욕하는 장면</h4>
+                    <ul class="list-disc ml-5 space-y-2 text-gray-700">
+                        <li><strong>정화의 공간으로서의 온천:</strong> 일본에서 온천은 단순히 몸을 씻는 곳을 넘어, 일상의 부정(케가레)을 털어내고 신성함을 회복하는 '의례의 공간'입니다.</li>
+                        <li><strong>신토(神道) 사상의 반영:</strong> 신들도 인간처럼 피로를 느끼고 오염될 수 있다는 독특한 사후 세계관을 보여줍니다.</li>
+                        <li><strong>환경 오염의 경고:</strong> 오물신 장면은 현대 사회의 무분별한 개발과 환경 오염에 대한 날카로운 비판을 담고 있습니다.</li>
+                    </ul>
+                </div>
+                <img src="https://th.bing.com/th/id/R.394ba35a1e33d8bc7a490f9b17d9dc9a?rik=NfXmkMHLhTJZ3A&riu=http%3a%2f%2ffile3.instiz.net%2fdata%2ffile3%2f2018%2f01%2f30%2f9%2ff%2f7%2f9f71bd8642119995c7565be50f1da271.gif&ehk=ah%2fAJb5Zdm1xBJQgLqCHjAwH7lh%2fcZfj8EFAmqFDUqU%3d&risl=&pid=ImgRaw&r=0" alt="신들의 목욕" class="gif-container">
+            </div>
+
+            <div class="analysis-card">
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2 card-title">이름을 빼앗기는 계약 장면</h4>
+                    <ul class="list-disc ml-5 space-y-2 text-gray-700">
+                        <li><strong>코토다마(언령) 사상:</strong> 말 속에 신비한 힘이 깃들어 있다는 믿음입니다. 이름을 가져가는 것은 자아를 구속하려는 주술적 행위입니다.</li>
+                        <li><strong>자아 상실에 대한 공포:</strong> 이름을 잊는 것은 돌아갈 곳을 잃는 것을 의미하며, 조직 속에서 본질을 잃어가는 현대인을 상징합니다.</li>
+                    </ul>
+                </div>
+                <img src="https://postfiles.pstatic.net/MjAxNzA4MTFfMTk5/MDAxNTAyMzkzNjg5MDIw.JQSRVo6BNGCBamzs9iMzUqEYt9bFYJ1kxOal0q9KPeog.VK4CbpXgLzZLm0uNWeFWOPhXnr8TQ54_ZGA9dPAlYOkg.GIF.btskook91/tumblr_oj8g9aQipa1sv5krro1_540.gif?type=f100_webp" alt="유바바와의 계약" class="gif-container">
+            </div>
+
+            <div class="analysis-card">
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2 card-title">다양한 신들의 모습</h4>
+                    <ul class="list-disc ml-5 space-y-2 text-gray-700">
+                        <li><strong>야오요로즈노카미(팔백만 신):</strong> 만물에 신이 깃들어 있다는 사상으로, 오시라사마(무신) 등 사물을 존중하는 영성주의를 보여줍니다.</li>
+                        <li><strong>시각적 상상력의 정점:</strong> 일본 전설 속 요괴와 신들을 지브리만의 독창적인 판타지 세계로 재해석했습니다.</li>
+                    </ul>
+                </div>
+                <img src="https://th.bing.com/th/id/R.ac21999f0ae27321b2d52923698893cb?rik=8U3WTkf5ED0iYw&riu=http%3a%2f%2fticketimage.interpark.com%2fMovie%2fstill_image%2fV08%2fV0801665s_26.gif&ehk=NLpOigzQoErXeCXzB8PfO%2b2vDRayuwm%2f5C1akBUJ2Qo%3d&risl=&pid=ImgRaw&r=0" alt="다양한 신들" class="gif-container">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bgm');
+        const posterWrapper = document.getElementById('poster-wrapper');
+        const guideText = document.getElementById('music-guide');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                posterWrapper.classList.remove('playing');
+                guideText.innerText = "포스터를 클릭하여 OST를 들어보세요.";
+            } else {
+                // 브라우저 정책상 사용자 상호작용 후 재생 가능
+                audio.play().then(() => {
+                    isPlaying = true;
+                    posterWrapper.classList.add('playing');
+                    guideText.innerText = "음악 재생 중: '언제나 몇 번이라도'. 다시 클릭하면 멈춥니다.";
+                }).catch(e => {
+                    console.error("음악 재생 실패: ", e);
+                    guideText.innerText = "파일을 재생할 수 없습니다. 파일명을 다시 확인해주세요.";
+                });
+            }
+        }
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(s => s.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(b => b.classList.remove('active-nav'));
+
+            const targetSection = document.getElementById('section-' + sectionId);
+            if (targetSection) targetSection.classList.add('active');
+            
+            const targetBtn = document.getElementById('btn-' + sectionId);
+            if (targetBtn) targetBtn.classList.add('active-nav');
+
+            const video = document.querySelector('video');
+            if (sectionId !== 'intro' && video) {
+                video.pause();
+            }
+
+            if (sectionId !== 'main') {
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+</html>
